@@ -1,0 +1,31 @@
+
+[blockchain_a]
+  docker_cmd_params = ["-b", "1"]
+  type = "anvil"
+
+  [blockchain_a.resources]
+    cpus = 1
+    memory_mb = 1048
+
+[data_provider]
+  port = 9111
+
+[[nodesets]]
+  nodes = 5
+  override_mode = "all"
+
+  [nodesets.db]
+    image = "postgres:12.0"
+
+    [nodesets.db.resources]
+      cpus = 1
+      memory_mb = 1048
+
+  [[nodesets.node_specs]]
+
+    [nodesets.node_specs.node]
+      image = "public.ecr.aws/chainlink/chainlink:v2.17.0"
+
+      [nodesets.node_specs.node.resources]
+        cpus = 1
+        memory_mb = 1048

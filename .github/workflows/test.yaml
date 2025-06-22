@@ -1,0 +1,87 @@
+name: Go Tests
+on: [push]
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  test:
+    permissions:
+      id-token: write
+      contents: read
+    runs-on: ${{ matrix.test.vm }}
+    strategy:
+      fail-fast: false
+      matrix:
+        test:
+          - path: framework
+            vm: ubuntu-latest
+            regex: TestSmoke
+          - path: wasp
+            vm: ubuntu22.04-16cores-64GB # ghv-ignore!
+            regex: TestSmoke
+          - path: wasp
+            vm: ubuntu-latest
+            regex: TestBenchSpy
+          - path: k8s-test-runner
+            vm: ubuntu-latest
+            regex: ./...
+          - path: parrot
+            vm: ubuntu-latest
+            regex: ./...
+          - path: tools/workflowresultparser
+            vm: ubuntu-latest
+            regex: ./...
+          - path: tools/asciitable
+            vm: ubuntu-latest
+            regex: ./...
+          - path: tools/ghlatestreleasechecker
+            vm: ubuntu-latest
+            regex: ./...
+          - path: tools/ecrimagefetcher
+            vm: ubuntu-latest
+            regex: ./...
+          - path: tools/testlistgenerator
+            vm: ubuntu-latest
+            regex: ./...
+          - path: tools/gotestloghelper
+            vm: ubuntu-latest
+            regex: ./...
+          - path: tools/citool
+            vm: ubuntu-latest
+            regex: ./...
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure AWS credentials using OIDC
+        uses: aws-actions/configure-aws-credentials@b47578312673ae6fa5b5096b330d9fbac3d116df # v4.2.1
+        with:
+          role-to-assume: ${{ secrets.PUBLIC_AWS_ECR_ROLE }}
+          aws-region: us-east-1
+      - name: Authenticate to ECR Public
+        id: login-ecr-public
+        uses: aws-actions/amazon-ecr-login@062b18b96a7aff071d4dc91bc00c4c1a7945b076 # v2.0.1
+        with:
+          registry-type: public
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: ${{ matrix.test.path }}/go.mod
+      - name: Install dependencies
+        working-directory: ${{ matrix.test.path }}
+        run: go mod download
+      - name: Cache Go modules
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: go-modules-${{ matrix.test.path }}-${{ hashFiles(format('{0}/go.sum', matrix.test.path)) }}-${{ runner.os }}-test
+          restore-keys: |
+            go-modules-${{ matrix.test.path }}-${{ runner.os }}-test
+            go-modules-${{ matrix.test.path }}-${{ runner.os }}
+      - uses: extractions/setup-just@e33e0265a09d6d736e2ee1e0eb685ef1de4669ff # v3.0.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          just-version: '1.39.0'
+      - name: Run tests
+        run: |
+          just test ${{ matrix.test.path }} ${{ matrix.test.regex }}
