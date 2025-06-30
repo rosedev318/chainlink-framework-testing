@@ -48,7 +48,7 @@ require (
 	k8s.io/apimachinery v0.33.2
 	k8s.io/cli-runtime v0.33.2
 	k8s.io/client-go v0.33.2
-	k8s.io/kubectl v0.33.2
+	k8s.io/kubectl v0.31.2
 )
 
 require (
@@ -83,8 +83,6 @@ require (
 	go.opentelemetry.io/auto/sdk v1.1.0 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1 // indirect
 	k8s.io/component-helpers v0.33.2 // indirect
-	sigs.k8s.io/randfill v1.0.0 // indirect
-)
 
 require (
 	github.com/Azure/go-ansiterm v0.0.0-20230124172434-306776ec8161 // indirect
