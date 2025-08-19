@@ -4,14 +4,14 @@ go 1.24.0
 
 require (
 	dario.cat/mergo v1.0.2
-	github.com/Masterminds/semver/v3 v3.3.1
+	github.com/Masterminds/semver/v3 v3.4.0
 	github.com/avast/retry-go v3.0.0+incompatible
 	github.com/aws/aws-sdk-go-v2/config v1.29.17
 	github.com/aws/aws-sdk-go-v2/service/secretsmanager v1.35.7
 	github.com/aws/constructs-go/constructs/v10 v10.4.2
-	github.com/aws/jsii-runtime-go v1.112.0
+	github.com/aws/jsii-runtime-go v1.113.0
 	github.com/barkimedes/go-deepcopy v0.0.0-20220514131651-17c30cfc62df
-	github.com/cdk8s-team/cdk8s-core-go/cdk8s/v2 v2.69.74
+	github.com/cdk8s-team/cdk8s-core-go/cdk8s/v2 v2.70.8
 	github.com/chaos-mesh/chaos-mesh/api v0.0.0-20240709130330-9f4feec7553f
 	github.com/docker/docker v28.0.1+incompatible
 	github.com/docker/go-connections v0.5.0
