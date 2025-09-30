@@ -26,7 +26,7 @@ jobs:
       - name: Checkout the Repo
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       - name: Install Go
-        uses: smartcontractkit/.github/actions/setup-golang@setup-golang/1.1.0
+        uses: smartcontractkit/.github/actions/setup-golang@setup-golang/1.1.1
         with:
           # test_download_vendor_packages_command: cd lib && go mod download
           go-version-file: ./lib/go.mod
